@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import Moment from 'moment';
 import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 
 function App() {
   const [list, setList] = useState([]);
-  const history = useHistory();
   useEffect(() => {
-    Axios({
-      url: "http://localhost:8080/task/all",
-    })
+    axios.get("http://localhost:8080/task/all",
+    )
       .then((response) => {
-        console.log(response.data)
         setList(response.data);
       })
       .catch((error) => {
@@ -22,15 +20,13 @@ function App() {
 
   const onClick = (e) => {
     const id = e.currentTarget.getAttribute("data-value")
-    console.log(id)
-    Axios.delete(`http://localhost:8080/task/${id}`).then((response) => {
-      console.log(response.data)
-      
+    axios.delete(`http://localhost:8080/task/${id}`).then((response) => {
+      toast.success(response);
+      window.location.reload(false);
     })
     .catch((error) => {
       console.log(error);
     });
-    history.push("/");
   };
 
   return (

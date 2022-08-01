@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const AddPost = ({ addContact }) => {
+const AddTask = () => {
   const [description, setDescription] = useState("");
   const [checked, setChecked] = useState(true);
 
@@ -21,16 +21,16 @@ const AddPost = ({ addContact }) => {
       descripcion: description,
       valid: checked,
     };
-    console.log(data);
-    addContact(data);
     axios.post('http://localhost:8080/task/', data)
     .then(function (response) {
       console.log(response);
+      toast.success('Task added succesfully');
+      history.push("/");
     })
     .catch(function (error) {
       console.log(error);
     });
-    history.push("/");
+    
   };
 
   return (
@@ -51,12 +51,13 @@ const AddPost = ({ addContact }) => {
             <div className="form-group">
               <input name="checked" type="checkbox" checked={checked} 
               onChange={e => setChecked(!checked)} />
+              <label>¿La tarea está activa?</label>
             </div>
             <div className="form-group">
               <input
                 className="btn btn-block btn-dark"
                 type="submit"
-                value="Add Student"
+                value="Add Task"
               />
             </div>
           </form>
@@ -70,9 +71,6 @@ const mapStateToProps = (state) => ({
   contacts: state,
 });
 const mapDispatchToProps = (dispatch) => ({
-  addContact: (data) => {
-    dispatch({ type: "ADD_CONTACT", payload: data });
-  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPost);
+export default connect(mapStateToProps, mapDispatchToProps)(AddTask);
